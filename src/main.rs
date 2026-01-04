@@ -1,7 +1,12 @@
-mod nodeTemplate;
-use nodeTemplate::Node;
+#![allow(unused)]
 
-fn startingFunction(ip: &str) -> String {
+mod edge;
+mod node;
+mod workflow;
+use node::Node;
+use workflow::Workflow;
+
+fn starting_function(ip: &str) -> String {
     "starting".to_string()
 }
 
@@ -15,23 +20,17 @@ fn add2(ip: &str) -> String {
 
 fn main() {
     // define nodes
-    let startingNode = Node::new("startingNode".to_string(), startingFunction);
+    let starting_node = Node::new("startingNode".to_string(), starting_function);
     let node1 = Node::new("node1".to_string(), add1);
     let node2 = Node::new("node2".to_string(), add2);
 
-    // arange nodes in an array in the order of execution
-    let nodes = vec![startingNode, node1, node2];
+    // define edges
+    let edge1 = edge::Edge::new(&starting_node, &node1);
+    let edge2 = edge::Edge::new(&node1, &node2);
 
-    // define global context
-    let mut currentInput = String::new();
-    let mut currentOutput = String::new();
+    // define workflow
+    let workflow = Workflow::new(vec![edge1, edge2]);
 
-    // make a loop to execute nodes in order
-    for node in nodes {
-        currentInput = currentOutput.clone();
-        currentOutput = node.execute(&currentInput);
-    }
-
-    // print the final output
-    println!("{}", currentOutput);
+    // run workflow
+    workflow.run();
 }
