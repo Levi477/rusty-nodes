@@ -25,12 +25,13 @@ fn main() {
     let node2 = Node::new("node2".to_string(), add2);
 
     // define edges
-    let edge1 = edge::Edge::new(&starting_node, &node1);
-    let edge2 = edge::Edge::new(&node1, &node2);
+    let edge1 = edge::Edge::new(starting_node.clone(), node1.clone());
+    let edge2 = edge::Edge::new(node1.clone(), node2.clone());
 
     // define workflow
     let workflow = Workflow::new(vec![edge1, edge2]);
 
     // run workflow
-    workflow.run();
+    let output = workflow.run();
+    println!("output is : {}", output);
 }
